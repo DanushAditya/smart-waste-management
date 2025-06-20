@@ -1,0 +1,67 @@
+<!-- login.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - Waste Management</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="login-container">
+    <h2>Login</h2>
+    <input type="text" id="username" placeholder="Enter your username" required>
+    <input type="password" id="password" placeholder="Enter your password" required>
+    <button onclick="loginUser()">Login</button>
+
+    <p>Don't have an account? <a href="#" onclick="showRegister()">Register here</a></p>
+
+    <div id="register-box" style="display:none;">
+      <h2>Register</h2>
+      <input type="text" id="newUsername" placeholder="Choose a username">
+      <input type="password" id="newPassword" placeholder="Choose a password">
+      <button onclick="registerUser()">Register</button>
+    </div>
+  </div>
+
+  <script>
+    function loginUser() {
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+
+      const users = JSON.parse(localStorage.getItem('users')) || {};
+
+      if (users[username] && users[username].password === password) {
+        localStorage.setItem('currentUser', username);
+        window.location.href = 'index.html';
+      } else {
+        alert("Invalid username or password!");
+      }
+    }
+
+    function registerUser() {
+      const newUsername = document.getElementById('newUsername').value;
+      const newPassword = document.getElementById('newPassword').value;
+      const users = JSON.parse(localStorage.getItem('users')) || {};
+
+      if (users[newUsername]) {
+        alert("Username already exists!");
+        return;
+      }
+
+      users[newUsername] = {
+        password: newPassword,
+        points: 0
+      };
+
+      localStorage.setItem('users', JSON.stringify(users));
+      alert("Registered successfully! Now login.");
+      document.getElementById('register-box').style.display = 'none';
+    }
+
+    function showRegister() {
+      document.getElementById('register-box').style.display = 'block';
+    }
+  </script>
+</body>
+</html>
